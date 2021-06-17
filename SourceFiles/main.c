@@ -2,8 +2,7 @@
 #include "./functions.h"
 
 /* // data injection
-        int*data = (int*)malloc(1000);
-        int i;
+        int i, *data = (int*)malloc(1000);
         for(i=0; i<10; i++){
                 (*(data+i)) = i; // rvalue
         }
