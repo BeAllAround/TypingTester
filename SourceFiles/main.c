@@ -5,9 +5,8 @@
         int*data = (int*)malloc(1000);
         int i;
         for(i=0; i<10; i++){
-                (*(data+i)) = i;
+                (*(data+i)) = i; // rvalue
         }
-        printf("%d\n", data[2]);
 */
 
 int main(){
