@@ -1,3 +1,10 @@
+Key indexArr(Array*arr, int inx){
+	return arr->data[inx];
+}
+
+Map indexMap(map*m, int inx){
+	return m->data[inx];
+}
 void push(Array*arr, Key item){
 	arr->data[arr->length++] = item;
 }
@@ -9,18 +16,19 @@ void append(map*m, Map item){
 int keySearch(Array*keys, char toFind){
 	int i;
 	for(i=0; i<keys->length; i++){
-		if((keys->data[i]).hF == toFind){
-			return keys->data[i].iF;
+		if(indexArr(keys, i).hF == toFind){
+			return indexArr(keys, i).iF;
 		}
 	}
 	return -1; // JavaScript raising exception! - keep in mind that we must write a condition while doing up GUI!
 }
 
 void setUpKeys(Array*arr){
-	for(char i = 48; i < 58; ++i){ // the range from 0 to z;
+	char i;
+	for(i = 48; i < 58; ++i){ // the range from 0 to z;
 		push(arr, newKey((char)i, (int)i));
 	}
-	for(char i = 65; i<91; ++i){
+	for(i = 65; i<91; ++i){
 		push(arr, newKey(tolower((char)i), (int)i));
 	}
 	push(arr, newKey(' ', 0x20));
@@ -66,8 +74,8 @@ int runner(INPUT*ip, Array*keys, map*mapA, char toFind){
 	char c;
 	int i;
 	for(i=0; i<mapA->length; i++){
-		if(toFind==mapA->data[i].first){
-			c = mapA->data[i].second;
+		if(toFind==indexMap(mapA, i).first){
+			c = indexMap(mapA, i).second;
 			b = 1;
 			break;
 		}
@@ -87,12 +95,11 @@ int runner(INPUT*ip, Array*keys, map*mapA, char toFind){
 
 //////////////////////////////////////////////////////////////////////
 int countWords(char*text){
-	int c = 1;
-	
-	for(int i=0; i<strlen(text); i++){
+	int i, c = 1;
+	for(i=0; i<strlen(text); i++){
 		if(text[i]==' ' || text[i]=='\n' || text[i]=='\t'){
 			c++;
-			if(text[i+1]== ' ')c--;
+			if(text[i+1] == ' ')c--;
 		}
 	}
 	return c;
@@ -110,10 +117,8 @@ void runThroughText(INPUT ip, Array*keys, map*mapA, char*text, int speed){ // in
 	// CALCULATE THE SPEED!!!
 	int counted = countWords(text);
 	
-	
-	int inx;
-
-	for(int i=0; i<strlen(text); i++){
+	int inx, i;
+	for(i=0; i<strlen(text); i++){
 		inx = keySearch(keys, tolower(text[i]));
 		printf("%d ", inx);
 		if(inx!=-1)pressAndRelease(ip, inx, isupper(text[i]));
@@ -138,11 +143,9 @@ void pressAndRelease(INPUT ip, int VKey, int UpperCase){
 	// Release the "A" key
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
-	
 	if(UpperCase){ // turn off;
 		CapsLock(ip);
 	}
-	
 }
 
 void setUpKeyboard(INPUT* ip){
