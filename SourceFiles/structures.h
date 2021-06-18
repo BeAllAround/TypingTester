@@ -8,7 +8,6 @@
 
 #define WINVER 0x0500
 void pressAndRelease(INPUT, int, int);
-void pressAndRelease(INPUT, int, int);
 void setUpKeyboard(INPUT*);
 
 

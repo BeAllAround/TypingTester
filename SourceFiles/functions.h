@@ -90,6 +90,7 @@ int runner(INPUT*ip, Array*keys, map*mapA, char toFind){
 	// Release the key
 	ip->ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, ip, sizeof(INPUT));
+	
 	return 1;
 }
 
@@ -113,7 +114,7 @@ int calculateSpeed(int length, int speed){
 }
 //////////////////////////////////////////////////////////////////////
 
-void runThroughText(INPUT ip, Array*keys, map*mapA, char*text, int speed){ // int runner(INPUT*ip, Array*keys, map*mapA, char toFind){
+void runThroughText(INPUT* ip, Array*keys, map*mapA, char*text, int speed){ // int runner(INPUT*ip, Array*keys, map*mapA, char toFind){
 	// CALCULATE THE SPEED!!!
 	int counted = countWords(text);
 	
@@ -121,8 +122,8 @@ void runThroughText(INPUT ip, Array*keys, map*mapA, char*text, int speed){ // in
 	for(i=0; i<strlen(text); i++){
 		inx = keySearch(keys, tolower(text[i]));
 		printf("%d ", inx);
-		if(inx!=-1)pressAndRelease(ip, inx, isupper(text[i]));
-		else runner(&ip, keys, mapA, text[i]);
+		if(inx!=-1)pressAndRelease(*ip, inx, isupper(text[i]));
+		else runner(ip, keys, mapA, text[i]);
 		Sleep(speed); // Sleep(calculateSpeed(strlen(text), speed));
 	}
 }
