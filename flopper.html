@@ -1,0 +1,215 @@
+
+<html>
+	<audio id="jump_sound" src="beep.mp3" preload="auto"></audio>
+	<div id="main_div" style="width: 1300px; height: 500px; border: 1px solid black;"></div>
+
+	<style>
+	#mario img {
+		width: 100%;
+		height: 100%;
+		object-fit: fill;
+	}
+
+	</style>
+
+	<script>
+		function play_jump() {
+			let audio = null // document.querySelector("#jump_sound")
+  			audio && audio.play()
+		}
+
+		let current_row;
+		let prev_row;
+
+		let current_char;
+		let prev_char;
+
+		let main_div = document.querySelector('#main_div')
+
+		let height = 500;
+
+		let width = 1300;
+
+		let char_height = 50
+
+		let char_width = 50;
+
+		let div_c = 0;
+
+		let _screen_play = {}
+
+		// character appear even tho char is usually meant character in C. I am stupid. I know
+		function char_appear() {
+			let _d = document.createElement('div')
+			_d.id = 'mario'
+			_d.style.width = '' + char_width + 'px';
+			_d.style.height = '' + char_height + 'px'
+			// _d.style.backgroundColor = 'red'
+
+			let _img = document.createElement('img')
+
+			_img.src = 'https://icons.iconarchive.com/icons/ph03nyx/super-mario/256/Paper-Mario-icon.png'
+
+			_d.appendChild(_img)
+			return _d
+		}
+
+		// mapped row-column relationship
+		let r_row_column = {}
+
+		let ii = 0 
+		for(let i = char_height; i <= height; i += char_height) {
+			let row = document.createElement('div')
+			row.style.display = 'flex'
+			row.style.width = '' + width + 'px'
+			row.style.height = '' + char_height + 'px'
+
+
+			let jj = 0
+			for(let j = char_width; j <= width; j += char_width) {
+				let col = document.createElement('div')
+				col.style.width = '' + char_width + 'px'
+				col.style.height = '' + char_height + 'px'
+				col.style.backgroundColor = 'white'
+
+				row.appendChild(col)
+
+				r_row_column[jj] = r_row_column[jj] || {}
+
+				r_row_column[jj][ii] = r_row_column[jj][ii] || col
+
+				jj++
+			}
+
+			main_div.appendChild(row)
+
+			ii++
+		}
+
+		// NOTE: Drawing obstacle
+		setTimeout(() => {
+			console.log(r_row_column[8])
+
+			// obstacle linear row-coln
+			let ob_col = r_row_column[8]
+			for(let col_k in ob_col) {
+				col = ob_col[col_k]
+				if(col_k < 5) continue
+
+				if(col.style['background-color'] == 'green') {
+					break // reached the ground: green
+				}
+				console.log('col:', col)
+
+				col.style.backgroundColor = 'red'
+
+			}
+		}, 111)
+
+		div_c = main_div.children.length - 2 // NOTE: -2 so we could include the ground
+		console.log(main_div.children)
+
+		let main_children = Array.from(main_div.children)
+
+		current_row = main_children[div_c]
+		prev_row = current_row
+
+		// Char spawn
+		console.log('spawn: starting current_row:', current_row)
+		current_row.children[0].replaceWith(current_char = char_appear())
+		prev_char = current_char
+
+		const ground = main_children[main_children.length - 1].children
+		// build and grass
+		for(let ground_col of ground) {
+
+			ground_col.style.backgroundColor = 'green'
+		}
+
+
+		let current_row_c = 0
+
+		function character_up() {
+                                // remove previous position
+				if(div_c <= 0) div_c = 1
+
+				prev_char && (prev_char.id = '', prev_char.innerHTML = '')
+                                // prev_char && prev_char.remove()
+
+                                div_c--;
+                                current_row = main_children[div_c]
+
+				// collision conditional on the way up
+				{
+					let col_px = current_row.children[current_row_c]
+
+					if(col_px.style['background-color'] == 'red') {
+						console.log("BLOCK")
+						document.body.innerHTML = 'YOU DIED. LOL'
+						return
+					}
+				}
+
+                                current_row.children[current_row_c].replaceWith(current_char = char_appear())
+                                
+                                prev_char = current_char
+
+                                console.log('current_char_up:', current_char, div_c)
+				current_row_c++
+		}
+
+                function character_down() {
+                                // remove previous position
+				if(div_c >= main_children.length - 2) {
+					// div_c = main_children.length - 2
+					return
+				}
+
+				prev_char && (prev_char.id = '', prev_char.innerHTML = '')
+                                // prev_char && prev_char.remove()
+
+                                div_c++;
+                                current_row = main_children[div_c]
+
+                                // collision conditional on the way up
+                                {
+                                        let col_px = current_row.children[current_row_c]
+
+                                        if(col_px.style['background-color'] == 'red') {
+                                                console.log("BLOCK")
+                                                document.body.innerHTML = 'YOU DIED. LOL'
+                                                return
+                                        }
+                                }
+
+                                current_row.children[current_row_c].replaceWith(current_char = char_appear())
+                                
+                                prev_char = current_char
+
+                                console.log('current_char_down:', current_char, div_c)
+				current_row_c++
+                }
+
+		setTimeout(() => {
+			setInterval(() => {
+				character_down()
+			}, 555)
+		}, 11)
+
+		// setInterval(() => {
+		//		current_row_c++
+		// }, 111)
+
+
+		document.addEventListener('keydown', async function(event) {
+
+			if(event.code == 'Space') {
+				play_jump()
+				character_up()
+			}
+		})
+
+
+	</script>
+</html>
+
