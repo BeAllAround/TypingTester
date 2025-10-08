@@ -14,8 +14,9 @@
 
 	<script>
 		function play_jump() {
-			let audio = null // document.querySelector("#jump_sound")
-  			audio && audio.play()
+			let audio = document.querySelector("#jump_sound")
+			// audio && (audio.play())
+  			audio && (audio.cloneNode(true).play())
 		}
 
 		let current_row;
@@ -49,8 +50,8 @@
 			let _img = document.createElement('img')
 
 			_img.src = 'https://icons.iconarchive.com/icons/ph03nyx/super-mario/256/Paper-Mario-icon.png'
-
 			_d.appendChild(_img)
+
 			return _d
 		}
 
