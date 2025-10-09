@@ -14,7 +14,7 @@
 
 	<script>
 		function play_jump() {
-			let audio = document.querySelector("#jump_sound")
+			let audio = null && document.querySelector("#jump_sound")
 			// audio && (audio.play())
   			audio && (audio.cloneNode(true).play())
 		}
@@ -45,12 +45,12 @@
 			_d.id = 'mario'
 			_d.style.width = '' + char_width + 'px';
 			_d.style.height = '' + char_height + 'px'
-			// _d.style.backgroundColor = 'red'
+			_d.style.backgroundColor = 'red'
 
 			let _img = document.createElement('img')
 
-			_img.src = 'https://icons.iconarchive.com/icons/ph03nyx/super-mario/256/Paper-Mario-icon.png'
-			_d.appendChild(_img)
+			// _img.src = 'https://icons.iconarchive.com/icons/ph03nyx/super-mario/256/Paper-Mario-icon.png'
+			// _d.appendChild(_img)
 
 			return _d
 		}
@@ -134,7 +134,7 @@
                                 // remove previous position
 				if(div_c <= 0) div_c = 1
 
-				prev_char && (prev_char.id = '', prev_char.innerHTML = '')
+				prev_char && (prev_char.id = '', prev_char.style['background-color'] = 'white', prev_char.innerHTML = '')
                                 // prev_char && prev_char.remove()
 
                                 div_c--;
@@ -166,7 +166,7 @@
 					return
 				}
 
-				prev_char && (prev_char.id = '', prev_char.innerHTML = '')
+				prev_char && (prev_char.id = '', prev_char.style['background-color'] = 'white', prev_char.innerHTML = '')
                                 // prev_char && prev_char.remove()
 
                                 div_c++;
